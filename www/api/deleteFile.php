@@ -5,5 +5,6 @@
     $position = "../".$_POST['position'];
     if(unlink($position)){
         delete_file_pre_submit($maTask, $id);
+        exit();
     }
 ?>

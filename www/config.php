@@ -177,7 +177,7 @@
     }
 
     function get_all_NV(){
-        $dieukien = "Giám đốc";
+        $dieukien = "admin";
         $conn = open_database();
         $sql = "SELECT * FROM user WHERE phongban != ?";
         $stmt = $conn->prepare($sql);
@@ -267,6 +267,7 @@
         if(!$stmt->execute()){
             return return_error_can_not_execute();
         }
+        $conn->close();
     }
 
     function get_curr_files($maTask){

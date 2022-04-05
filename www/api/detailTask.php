@@ -87,28 +87,8 @@
         </div>
     </div>
     <div class="col-lg-4 col-sm-12">
-        <ul class="list-group">
-            <?php 
-                foreach ($dataFiles as $file) {
+        <ul id="list" class="list-group">
 
-                    ?>
-                        <li class="list-group-item">
-                            <?=split_file_name($file['files'])?>
-                            <?php
-                                if($dataTask['status'] !== 'Waiting'){
-                                    ?>
-                                    <p onclick="get_values_file('<?=split_file_name($file['files'])?>','<?=$file['maTask']?>', <?=$file['id']?>, '<?=$file['files']?>')"
-                                       class="btn btn-danger"
-                                       data-toggle="modal" data-target="#deleteFile">X
-                                    </p>
-                                    <?php
-                                }
-                            ?>
-                        </li>
-                    <?php
-
-                }
-            ?>
         </ul>
         <?php
             if($dataTask['status'] !== 'Waiting'){

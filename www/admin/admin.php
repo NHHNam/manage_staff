@@ -22,8 +22,10 @@
 
     // print_r($_GET['order']);
 
-    // add new staff
+    // get pb
     $result2 = get_pb();
+
+    // add new staff
     $target_dir = "../images/";
     $success = "";
     $error = "";
@@ -83,7 +85,9 @@
                 include("./manageReport.php");
             }else if($order == "addNV"){
                 include("./addNV.php");
-            }else{
+            }else if($order == "manageRoom"){
+                include("./manageRoom.php");
+            } else{
                 include("./dsNv.php");
             }
         ?>

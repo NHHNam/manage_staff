@@ -216,6 +216,35 @@
     <?php 
         include("admin/footer.php");
     ?>
-    <script src="js/script.js"></script>
+    <script src="js/script.js" defer></script>
+    <script defer>
+        $(document).ready(function ()  {
+            let dulieu;
+            const params = 'maTask='+encodeURI('<?=$dataTask['maTask']?>')
+            $.get(`api/get-file.php?${params}`, function(data, status) {
+                if(data.code == 0){
+                    dulieu = data.data;
+                    // console.log(dulieu);
+                    for(let i = 0; i < dulieu.length; i++){
+                        let tag = `
+                         <li class="list-group-item">
+                            ${split_name_file(dulieu[i].files)}
+                            <p onclick="get_values_file('${split_name_file(dulieu[i].files)}','<?=$dataTask['maTask']?>', ${dulieu[i].id}, '${dulieu[i].files}')"
+                                       class="btn btn-danger"
+                                       data-toggle="modal" data-target="#deleteFile">X
+                                    </p>
+                          </li>
+                    `;
+                        $('#list').append(tag)
+                    }
+                }
+            },"json");
+
+            function split_name_file(name_file){
+                const name_after = name_file.split("/")
+                return name_after[1]
+            }
+        });
+    </script>
 </body>
 </html>
