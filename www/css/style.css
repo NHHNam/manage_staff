@@ -1,0 +1,244 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* login page */
+
+.wrapper{ 
+    background: linear-gradient(to right, rgba(233,238,238,1) 44%, rgba(186,194,194,1) 91%);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main{ 
+    width: 1000px;
+    height: 600px;
+    background: white;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    display: flex;
+}
+
+.imgage-form{
+    border-radius: 10px 0 0 10px;
+    height: 100%;
+    width: 40%;
+}
+
+.imgage-form img{
+    flex-shrink: 0;
+    max-width: 100%;
+    min-height: 100%;
+    border-radius: 10px 0 0 10px;
+}
+
+.form-login{
+    height: 100%;
+    width: 60%;
+    border-radius: 0 10px 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-control{
+    width: 50%;
+    position: relative;
+}
+
+.form-control i{
+    position: absolute;
+    top: 15px;
+    left: 20px;
+}
+
+.form-control .input-control{
+    width: 100%;
+    padding: 15px 40px;
+    margin-bottom: 10px;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.btn{
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 18px;
+    background-color: rgba(255, 0, 0, 0.726);
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: red;
+}
+
+.input-control:focus ~ i{
+    color: red;
+}
+
+.saying{
+    margin-bottom: 30px;
+    font-size: 30px;
+    font-weight: 500;
+    color: red;
+}
+
+/* end login page */
+
+
+/* information person */
+.header{
+    text-align: center;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.image{
+    position: relative;
+    max-width: 100%;
+    text-align: center;
+}
+
+.changeImage{
+    position: absolute;
+    left: 0;
+    color: #fff;
+    font-size: 20px;
+    padding: 15px;
+    right: 0;
+    bottom: 0;
+    /* background: red; */
+}
+
+.changeImage:hover{
+    color:red;
+}
+
+.image img{
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    border: 3px solid red;
+}
+
+.row label,
+.group label{
+    font-size: 20px;
+    font-weight: 500;
+}
+.name-field,
+p.field-property{
+    font-size: 18px;
+    color: #004F79;
+    border-bottom: 1px solid #ccc;
+}
+
+.pages .group{
+    border-bottom: 1px solid #ccc;
+    margin: 0px 10px;
+}
+
+.pages .group:last-child{
+    border-bottom: none;
+}
+
+.field{
+    font-size: 18px;
+    font-weight: 500;
+    color: #004F79;
+    
+}
+
+/* nav-bar */
+.nav-item{
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px;
+    transition: all 0.3s;
+}
+
+.nav-item:hover{ 
+    color: #fff;
+    background-color: black;
+    cursor: pointer;
+}
+
+.nav-item:hover a{ 
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-item a{
+    color: black;
+    /* padding: 10px; */
+}
+
+/* end nav-bar */
+
+
+/* detailTask page */
+
+.fileN{
+    border: 3px dashed red;
+    text-align: center;
+    padding: 30px;
+}
+
+/* end detailTask page */
+
+/* admin page */
+
+nav{
+    position: relative;
+}
+
+a.brand{ 
+    color: black;
+    font-size: 30px;
+    position: absolute;
+    top: 30%;
+    left: 50px;
+    font-style: italic;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    padding: 10px;
+}
+
+a.brand:hover{
+    text-decoration: none;
+    color: black;
+}
+
+/* end admin page */
+
+/*task page*/
+.descA{
+    opacity: 0;
+    display: none;
+}
+
+.descA.active{
+    opacity: 1;
+    display:contents;
+}
+/*end task page*/
+
+@media screen and (max-width: 600px) {
+    a.brand{
+        display: none;
+    }
+}
