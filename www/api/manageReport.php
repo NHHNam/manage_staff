@@ -33,11 +33,13 @@
 
     <?php
         $stt_report = 1;
+        $condtition = array("Approved","Rejected");
         foreach ($list_staff as $staff){
 //            print_r($staff['username']);
             $result = get_report_manager($phongban, $staff['username'])['data'];
             foreach ($result as $report){
-                if($report['status'] != "Approved"){
+//                 != "Approved"
+                if(!in_array($report['status'], $condtition)){
             ?>
             <tr>
                 <td><?=$stt_report?></td>

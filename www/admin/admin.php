@@ -88,7 +88,10 @@
                 include("./addNV.php");
             }else if($order == "manageRoom"){
                 include("./manageRoom.php");
-            } else{
+            }else if($order == "staffRoom"){
+                include("./staffRoom.php");
+            }
+            else{
                 include("./listStaff.php");
             }
         ?>

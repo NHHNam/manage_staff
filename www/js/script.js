@@ -139,3 +139,19 @@ function get_values_evaluate_report(name, id, username, songay){
     $('#name_staff_report').html(name)
     $('#id_report_evaluate').val(id)
 }
+
+function get_name_to_huy_bo_nhiem(id, name){
+    console.log(id);
+    let id_reject_manager = $('#id_reject_manager');
+    let nameToShow = $('#name-to-huy');
+    id_reject_manager.val(id);
+    nameToShow.html(name);
+}
+
+function get_name_to_bo_nhiem(id, name){
+    let id_choose_manager = $('#id_choose_manager');
+    let nameToShow = $('#name-to-chon');
+    id_choose_manager.val(id);
+    console.log(id)
+    nameToShow.html(name);
+}

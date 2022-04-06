@@ -41,7 +41,7 @@
             ?>
             <tr>
                 <th scope="row"><?=$idRoom?></th>
-                <td><?=$room['namePB']?></td>
+                <td><a href="admin.php?order=staffRoom&PB=<?=$room['namePB']?>"><?=$room['namePB']?></a></td>
                 <td><?=$room['destination']?></td>
                 <td>
                     <i class="fas fa-edit btn-edit-room" data-toggle="modal" data-target="#edit-room-confirm"

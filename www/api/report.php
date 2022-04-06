@@ -26,17 +26,19 @@
         <th>Tiến trình</th>
     </thead>
     <tbody>
-    <?php 
+    <?php
+        $stt_report_staff= 1;
         if($result2['code'] == 0){
-            foreach($result2['data'] as $row1){
+            foreach(array_reverse($result2['data']) as $row1){
         ?>
         <tr>
-            <td>1</td>
+            <td><?=$stt_report_staff?></td>
             <td><?=$row1['reason']?></td>
             <td><?=convert_day($row1['fromDay'])?> <strong>To</strong> <?=convert_day($row1['toDay'])?></td>
-            <td>Waiting</td>
+            <td><?=$row1['status']?></td>
         </tr>
-        <?php 
+        <?php
+                $stt_report_staff+=1;
             }}
         ?>
     </tbody>

@@ -163,6 +163,9 @@
                 include("./api/manageTask.php");
             }else if($order == "detailTask"){
                 include("./api/detailTask.php");
+            }else if($order == "report"){
+                // report page
+                include("./api/report.php");
             }
             else{
                 // when first login go to the information page

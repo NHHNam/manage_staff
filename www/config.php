@@ -534,6 +534,23 @@
         return array('code' =>0, 'message'=>'', 'data'=>$data);
     }
 
+    function get_staff_by_admin(){
+        $conn = open_database();
+        $condition = "trưởng phòng";
+        $sql = "SELECT * FROM user WHERE chucvu = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s',  $condition);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code' =>0, 'message'=>'', 'data'=>$data);
+    }
+
     function add_task_manager($sender, $receiver, $name, $desc, $deadline, $phongban){
         $conn = open_database();
         $maTask = time().uniqid();
@@ -612,9 +629,25 @@
 
     function get_report_manager($pb, $username){
         $conn = open_database();
-        $sql = "SELECT u.firstName, u.lastName, u.username, u.tongngaynghi, r.id, r.reason, r.fromDay, r.toDay, r.songay, r.status FROM report r, user u WHERE r.username = u.username and r.username = ? and PB = ?";
+        $sql = "SELECT u.firstName, u.lastName, u.username, u.tongngaynghi, u.chucvu, r.id, r.reason, r.fromDay, r.toDay, r.songay, r.status FROM report r, user u WHERE r.username = u.username and r.username = ? and PB = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('ss', $username, $pb);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code'=>0, 'message'=>'', 'data'=>$data);
+    }
+
+    function get_report_admin($username){
+        $conn = open_database();
+        $sql = "SELECT u.firstName, u.lastName, u.username, u.tongngaynghi, u.chucvu, r.id, r.reason, r.fromDay, r.toDay, r.songay, r.status FROM report r, user u WHERE r.username = u.username and r.username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $username);
         if(!$stmt->execute()){
             return array('code' => 1, 'message' =>'cannot execute command');
         }
@@ -651,4 +684,68 @@
         return array('code'=>0,'message'=>'Update day');
     }
     // end manage report by manager
+
+    //Room staff
+
+    function get_staff_by_room($PB){
+        $conn = open_database();
+        $sql = "SELECT * FROM user WHERE phongban = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $PB);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+
+        $result = $stmt->get_result();
+        $data = array();
+        while ($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code'=>0, 'message'=>'', 'data'=>$data);
+    }
+
+    function choose_manager($id, $duocnghi){
+        $conn = open_database();
+        $chucvu = "trưởng phòng";
+        $sql = "update user set chucvu = ?, duocnghi = ? where id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('sii', $chucvu, $duocnghi, $id);
+
+        if(!$stmt->execute()){
+            return array('code'=>1, 'message'=>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Bổ nhiệm tổ trưởng thành công');
+    }
+
+    function reject_manager($duocnghi, $id){
+        $conn = open_database();
+        $chucvu = "nhân viên";
+        $sql = "update user set chucvu = ?, duocnghi = ? where id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('sii', $chucvu, $duocnghi, $id);
+
+        if(!$stmt->execute()){
+            return array('code'=>1, 'message'=>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Huỷ bổ nhiệm tổ trưởng thành công');
+    }
+
+    function check_has_truong_phong($maPB){
+        $conn = open_database();
+        $chucvu = "trưởng phòng";
+        $sql = "SELECT * FROM user n, phongban p WHERE n.phongban = p.namePB and p.namePB = ? and n.chucvu = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $maPB, $chucvu);
+
+        if(!$stmt->execute()){
+            return array('code' =>1, 'message' =>'Cannot execute query');
+        }
+        $result = $stmt->get_result();
+        if($result->num_rows == 0){
+            return false;
+        }
+        return true;
+    }
+
+    //End Room staff
 ?>
