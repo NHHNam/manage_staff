@@ -237,6 +237,7 @@ a.brand:hover{
 }
 /*end task page*/
 
+
 @media screen and (max-width: 600px) {
     a.brand{
         display: none;

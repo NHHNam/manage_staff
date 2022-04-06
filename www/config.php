@@ -314,11 +314,11 @@
         return array('code' => 0, 'message' =>'', 'data' => $data);
     }
 
-    function submit_task($maTask, $list, $time){
+    function submit_task($maTask, $list, $comment,$time){
         $conn = open_database();
-        $sql = "INSERT INTO submitTask(maTask, arrayFile, dateTime) values(?, ?, ?)";
+        $sql = "INSERT INTO submitTask(maTask, arrayFile, comment,dateTime) values(?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('sss', $maTask, $list, $time);
+        $stmt->bind_param('ssss', $maTask, $list, $comment, $time);
 
         if(!$stmt->execute()){
             return return_error_can_not_execute();
@@ -379,7 +379,7 @@
         return $releaseDay;
     }
 
-    function xin_nghi($fname, $lname, $reason, $toDay, $fromDay, $maPB, $status){
+    function xin_nghi($username,$fname, $lname, $reason, $toDay, $fromDay, $maPB, $status){
         $conn = open_database();
         $numDay = get_number_day($toDay, $fromDay) + 1;
         $releaseDay = get_release_day($fname, $lname);
@@ -389,9 +389,9 @@
             return array('code' => 2, 'message' =>'Số ngày bạn muốn nghỉ đã vượt qua số ngày cho phép');
         }
 
-        $sql = "insert into report(name, reason, fromDay, toDay, songay, PB, status) values(?, ?, ?, ?, ?, ?, ?)";
+        $sql = "insert into report(username, name, reason, fromDay, toDay, songay, PB, status) values(?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('ssssiss', $nameNv, $reason, $fromDay, $toDay, $numDay, $maPB, $status);
+        $stmt->bind_param('sssssiss', $username, $nameNv, $reason, $fromDay, $toDay, $numDay, $maPB, $status);
 
         if(!$stmt->execute()){
             return array('code' => 1, 'message' =>'cannot execute command');
@@ -517,5 +517,138 @@
         return array('code' =>0, 'message'=>'', 'data'=>$data);
     }
 
+    function get_staff_by_manager($pb){
+        $conn = open_database();
+        $condition = "nhân viên";
+        $sql = "SELECT * FROM user WHERE phongban = ? and chucvu = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $pb, $condition);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code' =>0, 'message'=>'', 'data'=>$data);
+    }
+
+    function add_task_manager($sender, $receiver, $name, $desc, $deadline, $phongban){
+        $conn = open_database();
+        $maTask = time().uniqid();
+        $status = "New";
+        $evaluate = "";
+        $comment = "";
+        $sql = "INSERT INTO task(maTask, sender, receiver, nameTask, descTask, deadline, status, phongban, evaluate, comment) VALUES(?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssssssssss', $maTask, $sender, $receiver, $name, $desc, $deadline, $status, $phongban, $evaluate, $comment);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Thêm task mới thành công');
+    }
+
+    function get_desc_task_edit($id){
+        $conn = open_database();
+        $sql = "SELECT * FROM task WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+        return $data['descTask'];
+    }
+
+    function edit_task_manager($id, $name_task, $desc, $receiver){
+        $conn = open_database();
+        $sql = "UPDATE task SET nameTask = ?, descTask = ?, receiver = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('sssi', $name_task, $desc, $receiver, $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Sửa task thành công');
+    }
+
+    function delete_task_manager($id){
+        $conn = open_database();
+        $sql = "DELETE FROM task WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Xoá task thành công');
+    }
+
+    function evaluate_approve_task($maTask, $comment, $quality){
+        $conn = open_database();
+        $status = "Completed";
+        $sql = "UPDATE task set status = ? ,evaluate = ?, comment = ? WHERE maTask = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssss', $status,$quality, $comment, $maTask);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Chấp nhận task thành công');
+    }
+    function evaluate_reject_task($maTask, $comment, $quality){
+        $conn = open_database();
+        $status = "Rejected";
+        $sql = "UPDATE task set status = ? ,evaluate = ?, comment = ? WHERE maTask = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssss', $status,$quality, $comment, $maTask);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Từ chối task thành công');
+    }
     // end manage task by manager
+
+    // manage report by manager
+
+    function get_report_manager($pb, $username){
+        $conn = open_database();
+        $sql = "SELECT u.firstName, u.lastName, u.username, u.tongngaynghi, r.id, r.reason, r.fromDay, r.toDay, r.songay, r.status FROM report r, user u WHERE r.username = u.username and r.username = ? and PB = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $username, $pb);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code'=>0, 'message'=>'', 'data'=>$data);
+    }
+
+    function update_day_release($username, $numDay){
+        $conn = open_database();
+        $sql = "Update user set tongngaynghi = tongngaynghi + ? WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('is', $numDay, $username);
+
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        return array('code'=>0,'message'=>'Update day');
+    }
+
+    function change_status_report($id, $status){
+        $conn = open_database();
+        $sql = "Update report set status = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('si', $status, $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        return array('code'=>0,'message'=>'Update day');
+    }
+    // end manage report by manager
 ?>

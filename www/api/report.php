@@ -1,5 +1,5 @@
 <?php
-    $curr_day = date('Y-m-d', strtotime("+1 days")); // get date for choosing day for report
+    $tomorrow = date('Y-m-d', strtotime("+1 days")); // get date for choosing day for report
     // check report which we add report is waiting ? completed
 
     $result_check_report = check_report($data['firstName'], $data['lastName']);
@@ -59,12 +59,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="badge badge-secondary" for="fromDay">From day</label>
-                        <input class="form-control" type="date" name="fromDay" id="fromDay" min="<?=$curr_day?>">
+                        <input class="form-control" type="date" name="fromDay" id="fromDay" min="<?=$tomorrow?>">
                     </div>
 
                     <div class="form-group">
                         <label class="badge badge-secondary" for="toDay">To day</label>
-                        <input class="form-control" type="date" name="toDay" id="toDay" min="<?=$curr_day?>">
+                        <input class="form-control" type="date" name="toDay" id="toDay" min="<?=$tomorrow?>">
                     </div>
 
                     <div class="form-group">
@@ -75,6 +75,7 @@
                     <input type="hidden" name="PB" value="<?=$data['phongban']?>">
                     <input type="hidden" name="fName" value="<?=$data['firstName']?>">
                     <input type="hidden" name="lName" value="<?=$data['lastName']?>">
+                    <input type="hidden" name="username" value="<?=$data['username']?>">
 
                 </div>
                 <div class="modal-footer">

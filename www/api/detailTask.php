@@ -22,8 +22,9 @@
     }
     $result8 = get_curr_files($dataTask['maTask']);
     $dataFiles = $result8['data'];
-    
-    // submit task
+
+
+// submit task
     if(isset($_POST['submitBTN'])){
         $maTask = $_POST['task_submit'];
         $list = $_POST['listFiles'];
@@ -34,7 +35,7 @@
             $error = "Không thể submit tại vì vẫn chưa có file chọn";
         }else{
             change_status_task("Waiting", $maTask);
-            $resultSubmit = submit_task($maTask, $list, $time);
+            $resultSubmit = submit_task($maTask, $list, "",$time);
             if($resultSubmit['code'] === 0){
                 $success = $resultSubmit['message'];
             }else{
@@ -57,10 +58,50 @@
     // history submit list
     $resultHis = get_history_submit($dataTask['maTask']);
     $dataHis = $resultHis['data'];
+
+    if(isset($_POST['evaluate_task_approve'])){
+        $comment_task = $_POST['comment_task'];
+        $quality_task = $_POST['quality_task'];
+        $maTask = $_POST['maTask'];
+        $listFile = $_POST['listFile'];
+        $time = date("Y-m-d h:i:sa");
+        submit_task($maTask, $listFile, $comment_task,$time);
+        $result_approve_task = evaluate_approve_task($maTask, $comment_task, $quality_task);
+        if($result_approve_task['code'] === 0){
+            $success = $result_approve_task['message'];
+        }else{
+            $error = $result_approve_task['message'];
+        }
+    }else if(isset($_POST['evaluate_task_reject'])){
+        $comment_task = $_POST['comment_task'];
+        $quality_task = $_POST['quality_task'];
+        $maTask = $_POST['maTask'];
+        $listFile = $_POST['listFile'];
+        $time = date("Y-m-d h:i:sa");
+        submit_task($maTask, $listFile, $comment_task,$time);
+        $result_reject_task = evaluate_reject_task($maTask, $comment_task, $quality_task);
+        if($result_reject_task['code'] === 0){
+            $success = $result_reject_task['message'];
+        }else{
+            $error = $result_reject_task['message'];
+        }
+    }
 ?>
-<small>
-    <a href="index.php?order=task" class="text-primary">Back</a>
-</small>
+<?php
+    if($result3){
+        ?>
+        <small>
+            <a href="index.php?order=manageTask" class="text-primary">Back</a>
+        </small>
+        <?php
+    }else{
+        ?>
+        <small>
+            <a href="index.php?order=task" class="text-primary">Back</a>
+        </small>
+        <?php
+    }
+?>
 <div class="shadow-none p-3 mb-5 bg-light rounded row">
     <div class="col-lg-8 col-sm-12">
     <div class="group">
@@ -90,44 +131,63 @@
         <ul id="list" class="list-group">
 
         </ul>
+
         <?php
-            if($dataTask['status'] !== 'Waiting'){
+            if($result3){
+                if($dataTask['status'] == "Waiting"){
                 ?>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#exampleModal">
-                        +
-                    </button>
-                </div>
+                    <button class="btn btn-primary form-control" data-toggle="modal" data-target="#evaluate-confirm">Evaluate</button>
+                <?php
+                }
+            }else{
+                ?>
+                <?php
+                $cond = array("Completed", "Waiting");
+                if(!in_array("".$dataTask['status'], $cond)){
+                    ?>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#exampleModal">
+                            +
+                        </button>
+                    </div>
+                    <?php
+                }
+                ?>
+                <form>
+                    <div class="form-group">
+                        <?php
+                        if(in_array("".$dataTask['status'], $cond)){
+                            ?>
+                            <button type="button" class="btn btn-danger form-control"
+                                    onclick="get_values_unsubmit('<?=$dataTask['maTask']?>', '<?=$dataTask['nameTask']?>')"
+                                    data-toggle="modal" data-target="#unsubmit-confirm">
+                                UnSubmit
+                            </button>
+                            <?php
+                        }
+                        else{
+                            ?>
+                            <button type="button" class="btn btn-success form-control"
+                                    onclick="get_values_submit('<?=$dataTask['maTask']?>', '<?=$dataTask['nameTask']?>', '<?=$listFilesSubmit?>')"
+                                    data-toggle="modal" data-target="#submit-confirm">
+                                Submit
+                            </button>
+                            <?php
+                        }
+                        ?>
+
+                    </div>
+                </form>
                 <?php
             }
         ?>
-        <form>
-            <div class="form-group">
-                <?php
-                    if($dataTask['status'] === 'Waiting'){
-                        ?>
-                        <button type="button" class="btn btn-danger form-control"
-                                onclick="get_values_unsubmit('<?=$dataTask['maTask']?>', '<?=$dataTask['nameTask']?>')"
-                                data-toggle="modal" data-target="#unsubmit-confirm">
-                            UnSubmit
-                        </button>
-                        <?php
-                    }else{
-                        ?>
-                        <button type="button" class="btn btn-success form-control"
-                                onclick="get_values_submit('<?=$dataTask['maTask']?>', '<?=$dataTask['nameTask']?>', '<?=$listFilesSubmit?>')"
-                                data-toggle="modal" data-target="#submit-confirm">
-                            Submit
-                        </button>
-                        <?php
-                    }
-                ?>
 
-            </div>
-        </form>
         <div class="form-group">
             <button data-toggle="modal" data-target="#history-submit" class="btn btn-dark form-control">
                 History</button>
+        </div>
+        <div class="form-group">
+            <textarea readonly rows="4" class="form-control"><?=$dataTask['comment']?></textarea>
         </div>
     </div>
 </div>
@@ -256,6 +316,7 @@
                             ?>
                             <li class="list-group-item">
                                 <div class="mb-2"><i class="fas fa-clock"></i> <?=$file['dateTime']?></div>
+                                <div class="mb-2">Comment: <?=$file['comment']?></div>
                                 <div style="border: 1px solid #ccc;"></div>
                                 <div class="row mt-2">
                             <?php
@@ -277,6 +338,41 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm evaluate task -->
+<div class="modal fade" id="evaluate-confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Evaluate Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="badge badge-secondary">Nhận xét</label>
+                        <input class="form-control" name="comment_task" placeholder="Comment">
+                    </div>
+                    <div class="form-group">
+                        <select class="custom-select custom-select-sm" id="quality_task" name="quality_task">
+                            <option selected value="Good">Good</option>
+                            <option value="Well">Well</option>
+                            <option value="Bad">Bad</option>
+                        </select>
+                    </div>
+                    <input type="hidden" value="<?=$dataTask['maTask']?>" name="maTask">
+                    <input type="hidden" value="<?=$listFilesSubmit?>" name="listFile">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" name="evaluate_task_approve" class="btn btn-success">Approve</button>
+                    <button type="submit" name="evaluate_task_reject" class="btn btn-primary">reject</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -99,3 +99,43 @@ function get_values_staff_reset(id, fname, lname, username){
     $('#id-reset').val(id)
     $('#username-reset').val(username)
 }
+
+function get_values_edit_task(id, name){
+    $('#name_task_edit').val(name)
+    $('#id_task_edit').val(id)
+    get_desc_task(id)
+}
+
+function get_values_del_task(id, name){
+    $('#name_task_del').html(name)
+    $('#id_task_del').val(id)
+}
+
+function get_desc_task(id){
+    var http = new XMLHttpRequest();
+    var url = '../api/get_desc_task.php';
+    var params = `id=${id}`;
+    http.open('POST', url, true);
+
+    //Send the proper header information along with the request
+    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    http.onreadystatechange = function(e) {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            let data = e.target.response
+            data = JSON.parse(data)
+            data = data.data
+            console.log(data)
+            $('#desc_task_edit').html(data)
+        }
+    }
+    http.send(params);
+}
+
+function get_values_evaluate_report(name, id, username, songay){
+    console.log(name, id, username, songay)
+    $('#num_report_evaluate').val(songay)
+    $('#username_report_evaluate').val(username)
+    $('#name_staff_report').html(name)
+    $('#id_report_evaluate').val(id)
+}

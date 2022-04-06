@@ -26,7 +26,7 @@
     //end get info user
     
     // get task
-    $result1 = get_task($username);
+    $result1 = get_task($data['firstName']." ".$data['lastName']);
     // end get task
 
     // get report
@@ -91,16 +91,7 @@
         $maTask = $_GET['maTask'];
     }
     // handle start task
-    if(isset($_POST['startTask'])){
-        $maTask = $_POST['maTask'];
-        $resultStartTask = change_status_task("In Progress" ,$maTask);
-        if($resultStartTask['code'] === 0){
-            header("Location: index.php?order=task");
-            exit();
-        }else{
-            $error = $resultStartTask['message'];
-        }
-    }
+
 
     // handle report
     if(isset($_POST['addReport'])){
@@ -112,8 +103,9 @@
         $fName = $_POST['fName'];
         $lName = $_POST['lName'];
         $status = "Waiting";
+        $username = $_POST['username'];
 
-        $result_add_report = xin_nghi($fName, $lName, $reason, $toDay, $fromDay, $PB, $status);
+        $result_add_report = xin_nghi($username, $fName, $lName, $reason, $toDay, $fromDay, $PB, $status);
 //        print_r($result_add_report);
         if ($result_add_report['code'] == 0){
             $success = $result_add_report['message'];
@@ -169,6 +161,8 @@
             }else if ($order == "manageTask"){
                 // page manage Task
                 include("./api/manageTask.php");
+            }else if($order == "detailTask"){
+                include("./api/detailTask.php");
             }
             else{
                 // when first login go to the information page
@@ -224,10 +218,18 @@
                         let tag = `
                          <li class="list-group-item">
                             ${split_name_file(dulieu[i].files)}
-                            <p onclick="get_values_file('${split_name_file(dulieu[i].files)}','<?=$dataTask['maTask']?>', ${dulieu[i].id}, '${dulieu[i].files}')"
+                            <?php
+                                if(!$result3){
+                                    ?>
+                                        <p onclick="get_values_file('${split_name_file(dulieu[i].files)}',
+                                        '<?=$dataTask['maTask']?>', ${dulieu[i].id}, '${dulieu[i].files}')"
                                        class="btn btn-danger"
                                        data-toggle="modal" data-target="#deleteFile">X
                                     </p>
+                                    <?php
+                                }
+                            ?>
+
                           </li>
                     `;
                         $('#list').append(tag)
