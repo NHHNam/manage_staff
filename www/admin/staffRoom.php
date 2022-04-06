@@ -24,6 +24,7 @@
         }
     }
 ?>
+<small><a href="admin.php?order=manageRoom">Back</a></small>
 <table class="table">
     <thead>
     <tr>

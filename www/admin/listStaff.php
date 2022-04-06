@@ -19,6 +19,7 @@
         }
     }
 ?>
+<small><a href="admin.php?order=manageStaff">Back</a></small>
 <table class="table">
   <thead>
     <tr>
@@ -33,7 +34,7 @@
       <?php 
         $stt = 1;
         foreach($data as $a){
-
+            if($a['username'] != "admin"){
             ?>
                 <tr>
                     <th scope="row"><?=$stt?></th>
@@ -48,6 +49,7 @@
                 </tr>        
             <?php
             $stt += 1;
+            }
         }
       ?>
     

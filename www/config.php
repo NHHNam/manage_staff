@@ -177,11 +177,9 @@
     }
 
     function get_all_NV(){
-        $dieukien = "admin";
         $conn = open_database();
-        $sql = "SELECT * FROM user WHERE phongban != ?";
+        $sql = "SELECT * FROM user";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('s', $dieukien);
 
         if(!$stmt->execute()){
             return return_error_can_not_execute();

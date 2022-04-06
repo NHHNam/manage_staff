@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql-server
--- Generation Time: Apr 06, 2022 at 11:04 AM
+-- Generation Time: Apr 06, 2022 at 11:25 AM
 -- Server version: 8.0.1-dmr
 -- PHP Version: 7.4.20
 
@@ -34,11 +34,6 @@ CREATE TABLE `curFiles` (
   `maTask` varchar(100) NOT NULL,
   `files` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `curFiles`
---
-
 
 -- --------------------------------------------------------
 
@@ -80,11 +75,6 @@ CREATE TABLE `report` (
   `status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `report`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -98,11 +88,6 @@ CREATE TABLE `submitTask` (
   `comment` varchar(1000) NOT NULL,
   `dateTime` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `submitTask`
---
-
 
 -- --------------------------------------------------------
 
@@ -123,11 +108,6 @@ CREATE TABLE `task` (
   `evaluate` varchar(1000) NOT NULL,
   `comment` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `task`
---
-
 
 -- --------------------------------------------------------
 
@@ -157,7 +137,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `pwd`, `firstName`, `lastName`, `birth`, `email`, `address`, `phonenumber`, `chucvu`, `phongban`, `image`, `duocnghi`, `tongngaynghi`) VALUES
-(1, 'admin', '$2y$10$7yJwmIHMVtb71Qo/9y02Vek7KbgTmv4uOY6MVKdhzik1AyH1tx8ui', 'Giám', 'Đốc', '1994-03-30', 'giamdoc@gmail.com', 'secret', '0132456789', 'admin', 'admin', 'images/admin.jpg', 0, 0),
+(1, 'admin', '$2y$10$7yJwmIHMVtb71Qo/9y02Vek7KbgTmv4uOY6MVKdhzik1AyH1tx8ui', 'Giám', 'Đốc', '1994-03-30', 'giamdoc@gmail.com', 'secret', '0132456789', 'admin', 'admin', 'images/admin.jpg', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -207,37 +187,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `curFiles`
 --
 ALTER TABLE `curFiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `phongban`
 --
 ALTER TABLE `phongban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `submitTask`
 --
 ALTER TABLE `submitTask`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
