@@ -66,6 +66,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/60364cba16.js" crossorigin="anonymous"></script>
+    <script src="../js/script.js" defer></script>
     <style>
         .hero{
             margin: 50px;
@@ -88,7 +89,7 @@
             }else if($order == "manageRoom"){
                 include("./manageRoom.php");
             } else{
-                include("./dsNv.php");
+                include("./listStaff.php");
             }
         ?>
     </div>

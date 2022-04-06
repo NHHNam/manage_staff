@@ -73,3 +73,29 @@ function show(e) {
         removeDesc.removeClass('active')
     }
 }
+
+// manage Room
+function get_values_room(name_room, destination_room, id){
+    // console.log(name_room, destination_room)
+    $('#name-room-edit').val(name_room)
+    $('#destination-room-edit').val(destination_room)
+    $('#id-room-edit').val(id)
+}
+
+$('#nopTask').submit(()=>{
+    window.location.reload()
+});
+
+$('#addRoom').submit(()=>{
+    setTimeout(()=>{
+        window.location.reload()
+    }, 3000)
+});
+
+// list Staff page
+function get_values_staff_reset(id, fname, lname, username){
+    // console.log(id, fname, lname)
+    $('#name_staff_reset').html(fname + " " + lname)
+    $('#id-reset').val(id)
+    $('#username-reset').val(username)
+}

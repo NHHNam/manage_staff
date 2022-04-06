@@ -16,17 +16,9 @@
   <input type="hidden" name="id" value="<?=$data['id']?>">
 
   <div class="form-group">
-    <?php 
-      if(!empty($success)){
-        ?>
-          <div class="form-control alert alert-success"><?=$success?></div>
-        <?php
-      }else if(!empty($error)){
-        ?>
-          <div class="form-control alert alert-danger"><?=$error?></div>
-        <?php
-      }
-    ?>
+      <?php
+      include("alert.php");
+      ?>
   </div>
 
   <div class="form-group">

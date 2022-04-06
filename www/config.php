@@ -417,4 +417,105 @@
         return array('code' =>0, 'message'=>'', 'data'=>$data);
     }
     // end function of report
+
+    // manage Room
+
+    function edit_room($id, $name_room, $destination_room){
+        $conn = open_database();
+        $sql = "UPDATE phongban set namePB = ?, destination = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ssi', $name_room, $destination_room, $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0,'message'=>'Sửa thông tin phòng ban thành công');
+    }
+
+    function check_before_add_room_by_name($name_room){
+        $conn = open_database();
+        $sql = "SELECT * FROM phongban WHERE namePB = ?";
+
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bind_param('s', $name_room);
+
+        if((!$stmt->execute())){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+
+        $result = $stmt->get_result();
+
+        if($result->num_rows > 0){
+            return true;
+        }
+        return false;
+
+    }
+
+    function check_before_add_room_by_destination($destination){
+        $conn = open_database();
+        $sql1 = "SELECT * FROM phongban WHERE destination = ?";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bind_param('s', $destination);
+        if((!$stmt1->execute())){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result1 = $stmt1->get_result();
+        if($result1->num_rows > 0){
+            return true;
+        }
+        return false;
+    }
+
+    function add_room($name_room, $destination_room){
+        $conn = open_database();
+        if(check_before_add_room_by_name($name_room) == true || check_before_add_room_by_destination($destination_room) == true){
+            return array('code'=>2, 'message'=>'Thông tin nhập phòng mới đã tồn tại vui lòng xem lại và nhập thông tin khác');
+        }
+        $sql = "INSERT INTO phongban(namePB, destination) VALUES(?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('ss', $name_room, $destination_room);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0,'message'=>'Thêm phòng ban mới thành công');
+    }
+
+    // end manage Room
+
+    // list staff
+
+    function reset_pwd($id, $pwd){
+        $conn = open_database();
+        $hash = password_hash($pwd, PASSWORD_DEFAULT);
+        $sql = "UPDATE user set pwd = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('si', $hash, $id);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        return array('code'=>0, 'message'=>'Reset password thành công cho nhân viên '.$pwd);
+    }
+
+    // end list staff
+
+    // manage task by manager
+
+    function get_list_task_manager($pb){
+        $conn = open_database();
+        $sql = "SELECT * FROM task WHERE phongban = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('s', $pb);
+        if(!$stmt->execute()){
+            return array('code' => 1, 'message' =>'cannot execute command');
+        }
+        $result = $stmt->get_result();
+        $data = array();
+        while($row = $result->fetch_assoc()){
+            $data[] = $row;
+        }
+        return array('code' =>0, 'message'=>'', 'data'=>$data);
+    }
+
+    // end manage task by manager
 ?>

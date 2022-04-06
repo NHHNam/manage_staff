@@ -1,3 +1,13 @@
+<?php
+    $curr_day = date('Y-m-d', strtotime("+1 days")); // get date for choosing day for report
+    // check report which we add report is waiting ? completed
+
+    $result_check_report = check_report($data['firstName'], $data['lastName']);
+    $status_after_check = "";
+    if(count($result_check_report['data']) > 0){
+        $status_after_check = array_reverse($result_check_report['data'])['0']['status'];
+    }
+?>
 <div class="field">
     Số ngày nghỉ <?=$data['tongngaynghi']?> / <?=$data['duocnghi']?>
 </div>
@@ -32,13 +42,7 @@
     </tbody>
 </table>
 <?php
-if(!empty($error)){
-    ?>
-    <div id="errorsLogin" style="background-color: #D10000;color: white;font-size: 15px;padding: 10px; border-radius: 10px;">
-        <?=$error?>
-    </div>
-    <?php
-}
+    include("alert.php");
 ?>
 
 <!-- Add new report -->
